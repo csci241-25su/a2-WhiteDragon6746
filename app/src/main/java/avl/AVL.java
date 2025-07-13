@@ -40,8 +40,25 @@ public class AVL {
 
   /* insert w into the tree rooted at n, ignoring balance
    * pre: n is not null */
+  // compareTo: comes before it is -, after is +
   private void bstInsert(Node n, String w) {
     // TODO
+    int c = w.compareTo(n.word);
+    if (c < 0) {
+      if (n.left == null) {
+        n.left = new Node(w, n);
+        size++;
+      } else {
+        bstInsert(n.left, w);
+      }
+    } else if (c > 0) {
+      if (n.left == null) {
+        n.right = new Node(w, n);
+        size++;
+      } else {
+        bstInsert(n.right, w);
+      }
+    }
   }
 
   /** insert w into the tree, maintaining AVL balance
@@ -49,12 +66,36 @@ public class AVL {
   *  performed by this method. */
   public void avlInsert(String w) {
     // TODO
+    if (root == null) {
+      root = new Node(w);
+      size = 1;
+      return;
+    }
+    bstInsert(root, w);
   }
 
   /* insert w into the tree, maintaining AVL balance
    *  precondition: the tree is AVL balanced and n is not null */
   private void avlInsert(Node n, String w) {
     // TODO
+    int c = w.compareTo(n.word);
+    if (c < 0) {
+      if (n.left == null) {
+        n.left = new Node(w, n);
+        size++;
+      } else {
+        bstInsert(n.left, w);
+      }
+    } else if (c > 0) {
+      if (n.left == null) {
+        n.right = new Node(w, n);
+        size++;
+      } else {
+        bstInsert(n.right, w);
+      }
+    }
+
+    // now left/right rotate to rebalance.
   }
 
   /** do a left rotation: rotate on the edge from x to its right child.
