@@ -111,6 +111,11 @@ public class AVL {
     } else {
       root.parent.left = root;
     }
+
+    root.left = x;
+    x.parent = root;
+    x.right = x.right.left;
+    x.right.left.parent = x;
   }
 
   /** do a right rotation: rotate on the edge from x to its left child.
@@ -119,6 +124,21 @@ public class AVL {
     if (y.left == null) {
       return;
     }
+
+    Node root = y.left;
+
+    root.parent = y.parent;
+    if (root.parent.right == y) {
+      root.parent.right = root;
+    } else {
+      root.parent.left = root;
+    }
+
+    root.right = y;
+    y.parent = root;
+    y.left = y.left.right;
+    y.left.right.parent = y;
+  }
   }
 
   /** rebalance a node N after a potentially AVL-violoting insertion.
