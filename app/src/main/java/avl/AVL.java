@@ -42,7 +42,6 @@ public class AVL {
    * pre: n is not null */
   // compareTo: comes before it is -, after is +
   private void bstInsert(Node n, String w) {
-    // TODO
     int c = w.compareTo(n.word);
     if (c < 0) {
       if (n.left == null) {
@@ -65,13 +64,12 @@ public class AVL {
   *  precondition: the tree is AVL balanced and any prior insertions have been
   *  performed by this method. */
   public void avlInsert(String w) {
-    // TODO
     if (root == null) {
       root = new Node(w);
       size = 1;
       return;
     }
-    bstInsert(root, w);
+    avlInsert(root, w);
   }
 
   /* insert w into the tree, maintaining AVL balance
@@ -84,36 +82,54 @@ public class AVL {
         n.left = new Node(w, n);
         size++;
       } else {
-        bstInsert(n.left, w);
+        avlInsert(n.left, w);
       }
     } else if (c > 0) {
       if (n.left == null) {
         n.right = new Node(w, n);
         size++;
       } else {
-        bstInsert(n.right, w);
+        avlInsert(n.right, w);
       }
     }
 
-    // now left/right rotate to rebalance.
+    rebalance(n);
   }
 
   /** do a left rotation: rotate on the edge from x to its right child.
   *  precondition: x has a non-null right child */
   public void leftRotate(Node x) {
-    // TODO
+    if (x.right == null) {
+      return;
+    }
+
+    Node root = x.right;
+
+    root.parent = x.parent;
+    if (root.parent.right == x) {
+      root.parent.right = root;
+    } else {
+      root.parent.left = root;
+    }
   }
 
   /** do a right rotation: rotate on the edge from x to its left child.
   *  precondition: y has a non-null left child */
   public void rightRotate(Node y) {
-    // TODO
+    if (y.left == null) {
+      return;
+    }
   }
 
   /** rebalance a node N after a potentially AVL-violoting insertion.
   *  precondition: none of n's descendants violates the AVL property */
   public void rebalance(Node n) {
-    // TODO
+    int balance = 0; //rHeight - lHeight;
+    if (balance > 1) {
+
+    } else if (balance < -1) {
+
+    }
   }
 
   /** remove the word w from the tree */
