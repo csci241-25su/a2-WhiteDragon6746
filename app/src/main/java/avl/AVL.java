@@ -79,11 +79,9 @@ public class AVL {
   /* insert w into the tree, maintaining AVL balance
    *  precondition: the tree is AVL balanced and n is not null */
   private void avlInsert(Node n, String w) {
-    int c = w.compareTo(n.word);
-    if (c < 0) {
+    if (w.compareTo(n.word) < 0) {
       if (n.left == null) {
         n.left = new Node(w, n);
-        n.left.height = 0;
         size++;
       } else {
         avlInsert(n.left, w);
@@ -91,7 +89,6 @@ public class AVL {
     } else if (c > 0) {
       if (n.right == null) {
         n.right = new Node(w, n);
-        n.right.height = 0;
         size++;
       } else {
         avlInsert(n.right, w);
@@ -158,19 +155,18 @@ public class AVL {
   /** rebalance a node N after a potentially AVL-violoting insertion.
   *  precondition: none of n's descendants violates the AVL property */
   public void rebalance(Node n) {
-    int nBalance = getBalance(n);
-    if (nBalance > 1) {
-      if (getBalance(n.right) < 0) {
+    if (getBalance(n) > 1) {
+      if (getBalance(n.right) > 0) {
+        leftRotate(n);
+      } else {
         rightRotate(n.right);
         leftRotate(n);
-      } else {
-        leftRotate(n);
       }
-    } else if (nBalance < -1) {
-      if (getBalance(n.left) > 0) {
-        leftRotate(n.left);
+    } else if (getBalance(n) < -1) {
+      if (getBalance(n.left) < 0) {
         rightRotate(n);
       } else {
+        leftRotate(n.left);
         rightRotate(n);
       }
     }
