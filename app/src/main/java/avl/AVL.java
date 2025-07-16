@@ -1,5 +1,9 @@
 package avl;
 
+/* Author: Ashton Finch
+ * Date: 07/15/2025
+ * Description: A program to simulate BSTs and AVLs including rotations. */
+
 public class AVL {
 
   public Node root;
@@ -46,6 +50,7 @@ public class AVL {
     if (c < 0) {
       if (n.left == null) {
         n.left = new Node(w, n);
+        n.left.parent = n;
         size++;
       } else {
         bstInsert(n.left, w);
@@ -53,6 +58,7 @@ public class AVL {
     } else if (c > 0) {
       if (n.left == null) {
         n.right = new Node(w, n);
+        n.right.parent = n;
         size++;
       } else {
         bstInsert(n.right, w);
@@ -75,11 +81,12 @@ public class AVL {
   /* insert w into the tree, maintaining AVL balance
    *  precondition: the tree is AVL balanced and n is not null */
   private void avlInsert(Node n, String w) {
-    // TODO
     int c = w.compareTo(n.word);
     if (c < 0) {
       if (n.left == null) {
         n.left = new Node(w, n);
+        n.left.parent = n;
+        n.left.height = 0;
         size++;
       } else {
         avlInsert(n.left, w);
@@ -87,111 +94,112 @@ public class AVL {
     } else if (c > 0) {
       if (n.left == null) {
         n.right = new Node(w, n);
+        n.right.parent = n;
+        n.right.height = 0;
         size++;
       } else {
         avlInsert(n.right, w);
       }
     }
 
+    n.height = getHeight(n);
     rebalance(n);
   }
 
   /** do a left rotation: rotate on the edge from x to its right child.
   *  precondition: x has a non-null right child */
   public void leftRotate(Node x) {
-    if (x.right == null) {
+    if (x == null || x.right == null) {
       return;
     }
 
-    Node root2 = x.right;
+    Node y = x.right;
+    x.right = y.left;
 
-    if (x.parent == null) {
-      root = root2;
-      root2.parent = null;
-    } else {
-      root2.parent = x.parent;
-      if (root2.parent.right == x) {
-        root2.parent.right = root2;
-      } else {
-        root2.parent.left = root2;
-      }
+    if (y.left != null) {
+      y.left.parent = x;
     }
 
+    y.parent = x.parent;
 
-    root2.left = x;
-    x.parent = root2;
-    x.right = x.right.left;
-    x.right.left.parent = x;
+    if (x.parent == null) {
+      root = y;
+    } else if (x == x.parent.left) {
+      x.parent.left = y;
+    } else {
+      x.parent.right = y;
+    }
+
+    y.left = x;
+    x.parent = y;
+    x.height = getHeight(x);
+    y.height = getHeight(y);
   }
 
   /** do a right rotation: rotate on the edge from x to its left child.
   *  precondition: y has a non-null left child */
   public void rightRotate(Node y) {
-    if (y.left == null) {
+    if (y == null || y.left == null) {
       return;
     }
+    
+    Node x = y.left;
+    y.left = x.right;
 
-    Node root2 = y.left;
-
-    if (y.parent == null) {
-      root = root2;
-      root2.parent = null;
-    } else {
-      root2.parent = y.parent;
-      if (root2.parent.right == y) {
-        root2.parent.right = root2;
-      } else {
-        root2.parent.left = root2;
-      }
+    if (x.right != null) {
+      x.right.parent = y;
     }
 
-    root2.right = y;
-    y.parent = root2;
-    y.left = y.left.right;
-    y.left.right.parent = y;
+    x.parent = y.parent;
+
+    if (y.parent == null) {
+      root = x;
+    } else if (y == y.parent.left) {
+      y.parent.left = x;
+    } else {
+      y.parent.right = x;
+    }
+
+    x.right = y;
+    y.parent = x;
+    x.height = getHeight(x);
+    y.height = getHeight(y);
   }
   
 
   /** rebalance a node N after a potentially AVL-violoting insertion.
   *  precondition: none of n's descendants violates the AVL property */
   public void rebalance(Node n) {
-    if (getBalance(n) > 1) {
+    int nBalance = getBalance(n);
+    if (nBalance > 1) {
       if (getBalance(n.right) < 0) {
         rightRotate(n.right);
         leftRotate(n);
       } else {
         leftRotate(n);
       }
-    } else if (getBalance(n) < -1) {
+    } else if (nBalance < -1) {
       if (getBalance(n.left) > 0) {
         leftRotate(n.left);
         rightRotate(n);
       } else {
         rightRotate(n);
       }
-    } else { // n is null
-      return;
     }
   }
 
-  // Gets the height of the node recursively by adding 1
-  // plus the height of the left and right nodes until
-  // left and right are null.
   // Returns -1 if the starting node is null.
-  // Otherwise returns the height of n.
+  // Otherwise returns the height of n by looking 
+  // at left and right heights.
   public int getHeight(Node n) {
     if (n == null) {
       return -1;
     } else if (n.left == null && n.right == null) {
       return 0;
-    } else if (n.left == null && n.right != null) {
-      return 1 + getHeight(n.right);
-    } else if (n.left != null && n.right == null) {
-      return 1 + getHeight(n.left);
-    } else if (n.left.height >= n.right.height) {
-      return 1 + getHeight(n.left);
+    } else if (n.left.height > n.right.height) {
+      return 1 + n.left.height;
     } else {
-      return 1 + getHeight(n.right);
+      return 1 + n.right.height;
     }
   }
 
