@@ -133,7 +133,7 @@ public class AVL {
 
     Node root2 = y.left;
 
-    if (x.parent == null) {
+    if (y.parent == null) {
       root = root2;
       root2.parent = null;
     } else {
