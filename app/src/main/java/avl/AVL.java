@@ -178,12 +178,23 @@ public class AVL {
   public int getHeight(Node n) {
     if (n == null) {
       return -1;
-    } else if (n.left == null && n.right == null) {
-      return 0;
-    } else if (n.left.height > n.right.height) {
-      return 1 + n.left.height;
     } else {
-      return 1 + n.right.height;
+      int lHeight = 0;
+      int rHeight = 0;
+
+      if (n.left != null) {
+        lHeight = n.left.height;
+      }
+
+      if (n.right != null) {
+        rHeight = n.right.height;
+      }
+
+      if (lHeight > rHeight) {
+        return 1 + lHeight;
+      } else {
+        return 1 + rHeight;
+      }
     }
   }
 
