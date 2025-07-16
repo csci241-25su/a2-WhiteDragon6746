@@ -50,15 +50,13 @@ public class AVL {
     if (c < 0) {
       if (n.left == null) {
         n.left = new Node(w, n);
-        n.left.parent = n;
         size++;
       } else {
         bstInsert(n.left, w);
       }
     } else if (c > 0) {
-      if (n.left == null) {
+      if (n.right == null) {
         n.right = new Node(w, n);
-        n.right.parent = n;
         size++;
       } else {
         bstInsert(n.right, w);
@@ -85,16 +83,14 @@ public class AVL {
     if (c < 0) {
       if (n.left == null) {
         n.left = new Node(w, n);
-        n.left.parent = n;
         n.left.height = 0;
         size++;
       } else {
         avlInsert(n.left, w);
       }
     } else if (c > 0) {
-      if (n.left == null) {
+      if (n.right == null) {
         n.right = new Node(w, n);
-        n.right.parent = n;
         n.right.height = 0;
         size++;
       } else {
@@ -109,10 +105,6 @@ public class AVL {
   /** do a left rotation: rotate on the edge from x to its right child.
   *  precondition: x has a non-null right child */
   public void leftRotate(Node x) {
-    if (x == null || x.right == null) {
-      return;
-    }
-
     Node y = x.right;
     x.right = y.left;
 
@@ -139,10 +131,6 @@ public class AVL {
   /** do a right rotation: rotate on the edge from x to its left child.
   *  precondition: y has a non-null left child */
   public void rightRotate(Node y) {
-    if (y == null || y.left == null) {
-      return;
-    }
-    
     Node x = y.left;
     y.left = x.right;
 
