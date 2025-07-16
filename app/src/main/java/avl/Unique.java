@@ -63,7 +63,7 @@ public class Unique {
         }
       }
 
-      return avl.getSize;
+      return avl.getSize();
     }
 
 
