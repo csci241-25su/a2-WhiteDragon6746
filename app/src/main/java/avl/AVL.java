@@ -155,19 +155,19 @@ public class AVL {
   /** rebalance a node N after a potentially AVL-violoting insertion.
   *  precondition: none of n's descendants violates the AVL property */
   public void rebalance(Node n) {
-    if (getBalance(n) > 1) {
-      if (getBalance(n.right) >= 0) {
-        leftRotate(n);
-      } else {
-        rightRotate(n.right);
-        leftRotate(n);
-      }
-    } else if (getBalance(n) < -1) {
+    if (getBalance(n) < -1) {
       if (getBalance(n.left) <= 0) {
         rightRotate(n);
       } else {
         leftRotate(n.left);
         rightRotate(n);
+      }
+    } else if (getBalance(n) > 1) {
+      if (getBalance(n.right) >= 0) {
+        leftRotate(n);
+      } else {
+        rightRotate(n.right);
+        leftRotate(n);
       }
     }
   }
@@ -199,15 +199,10 @@ public class AVL {
   }
 
   // Returns the balance of n by returning the right height - left.
-  // If n is null just returns a balance of 0.
   public int getBalance(Node n) {
-    if (n != null) {
-      int rHeight = getHeight(n.right);
-      int lHeight = getHeight(n.left);
-      return rHeight - lHeight;
-    } else {
-      return 0;
-    }
+    int rHeight = getHeight(n.right);
+    int lHeight = getHeight(n.left);
+    return rHeight - lHeight;
   }
 
   /** remove the word w from the tree */
