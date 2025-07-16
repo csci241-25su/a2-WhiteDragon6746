@@ -103,17 +103,23 @@ public class AVL {
       return;
     }
 
-    Node root = x.right;
+    Node root2 = x.right;
 
-    root.parent = x.parent;
-    if (root.parent.right == x) {
-      root.parent.right = root;
+    if (x.parent == null) {
+      root = root2;
+      root2.parent = null;
     } else {
-      root.parent.left = root;
+      root2.parent = x.parent;
+      if (root2.parent.right == x) {
+        root2.parent.right = root2;
+      } else {
+        root2.parent.left = root2;
+      }
     }
 
-    root.left = x;
-    x.parent = root;
+
+    root2.left = x;
+    x.parent = root2;
     x.right = x.right.left;
     x.right.left.parent = x;
   }
@@ -125,30 +131,79 @@ public class AVL {
       return;
     }
 
-    Node root = y.left;
+    Node root2 = y.left;
 
-    root.parent = y.parent;
-    if (root.parent.right == y) {
-      root.parent.right = root;
+    if (x.parent == null) {
+      root = root2;
+      root2.parent = null;
     } else {
-      root.parent.left = root;
+      root2.parent = y.parent;
+      if (root2.parent.right == y) {
+        root2.parent.right = root2;
+      } else {
+        root2.parent.left = root2;
+      }
     }
 
-    root.right = y;
-    y.parent = root;
+    root2.right = y;
+    y.parent = root2;
     y.left = y.left.right;
     y.left.right.parent = y;
   }
-  }
+  
 
   /** rebalance a node N after a potentially AVL-violoting insertion.
   *  precondition: none of n's descendants violates the AVL property */
   public void rebalance(Node n) {
-    int balance = 0; //rHeight - lHeight;
-    if (balance > 1) {
+    if (getBalance(n) > 1) {
+      if (getBalance(n.right) < 0) {
+        rightRotate(n.right);
+        leftRotate(n);
+      } else {
+        leftRotate(n);
+      }
+    } else if (getBalance(n) < -1) {
+      if (getBalance(n.left) > 0) {
+        leftRotate(n.left);
+        rightRotate(n);
+      } else {
+        rightRotate(n);
+      }
+    } else { // n is null
+      return;
+    }
+  }
 
-    } else if (balance < -1) {
+  // Gets the height of the node recursively by adding 1
+  // plus the height of the left and right nodes until
+  // left and right are null.
+  // Returns -1 if the starting node is null.
+  // Otherwise returns the height of n.
+  public int getHeight(Node n) {
+    if (n == null) {
+      return -1;
+    } else if (n.left == null && n.right == null) {
+      return 0;
+    } else if (n.left == null && n.right != null) {
+      return 1 + getHeight(n.right);
+    } else if (n.left != null && n.right == null) {
+      return 1 + getHeight(n.left);
+    } else if (n.left.height >= n.right.height) {
+      return 1 + getHeight(n.left);
+    } else {
+      return 1 + getHeight(n.right);
+    }
+  }
 
+  // Returns the balance of n by returning the right height - left.
+  // If n is null just returns a balance of 0.
+  public int getBalance(Node n) {
+    if (n != null) {
+      int rHeight = getHeight(n.right);
+      int lHeight = getHeight(n.left);
+      return rHeight - lHeight;
+    } else {
+      return 0;
     }
   }
 
