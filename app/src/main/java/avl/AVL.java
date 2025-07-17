@@ -164,20 +164,26 @@ public class AVL {
   /** rebalance a node N after a potentially AVL-violoting insertion.
   *  precondition: none of n's descendants violates the AVL property */
   public void rebalance(Node n) {
-    if (getBalance(n) < -1) {
-      if (getBalance(n.left) <= 0) {
-        rightRotate(n);
-      } else {
-        leftRotate(n.left);
-        rightRotate(n);
+    while (n != null) {
+      n.height = getHeight(n);
+      
+      if (getBalance(n) < -1) {
+        if (getBalance(n.left) <= 0) {
+          rightRotate(n);
+        } else {
+          leftRotate(n.left);
+          rightRotate(n);
+        }
+      } else if (getBalance(n) > 1) {
+        if (getBalance(n.right) >= 0) {
+          leftRotate(n);
+        } else {
+          rightRotate(n.right);
+          leftRotate(n);
+        }
       }
-    } else if (getBalance(n) > 1) {
-      if (getBalance(n.right) >= 0) {
-        leftRotate(n);
-      } else {
-        rightRotate(n.right);
-        leftRotate(n);
-      }
+
+      n = n.parent;
     }
   }
 
