@@ -84,18 +84,14 @@ public class AVL {
     }
     if (w.compareTo(n.word) < 0) {
       if (n.left == null) {
-        n.left = new Node(w);
-        n.left.parent = n;
-        n.left.height = 0;
+        n.left = new Node(w, n);
         size++;
       } else {
         avlInsert(n.left, w);
       }
     } else if (w.compareTo(n.word) > 0) {
       if (n.right == null) {
-        n.right = new Node(w);
-        n.right.parent = n;
-        n.right.height = 0;
+        n.right = new Node(w, n);
         size++;
       } else {
         avlInsert(n.right, w);
@@ -166,7 +162,7 @@ public class AVL {
   public void rebalance(Node n) {
     while (n != null) {
       n.height = getHeight(n);
-      
+
       if (getBalance(n) < -1) {
         if (getBalance(n.left) <= 0) {
           rightRotate(n);
