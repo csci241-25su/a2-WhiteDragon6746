@@ -84,14 +84,18 @@ public class AVL {
     }
     if (w.compareTo(n.word) < 0) {
       if (n.left == null) {
-        n.left = new Node(w, n);
+        n.left = new Node(w);
+        n.left.parent = n;
+        n.left.height = 0;
         size++;
       } else {
         avlInsert(n.left, w);
       }
     } else if (w.compareTo(n.word) > 0) {
       if (n.right == null) {
-        n.right = new Node(w, n);
+        n.right = new Node(w);
+        n.right.parent = n;
+        n.right.height = 0;
         size++;
       } else {
         avlInsert(n.right, w);
