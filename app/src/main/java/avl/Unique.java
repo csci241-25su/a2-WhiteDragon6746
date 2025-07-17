@@ -1,5 +1,9 @@
 package avl;
 
+/* Author: Ashton Finch
+ * Date: 07/15/2025
+ * Description: A program to simulate BSTs and AVLs including rotations. */
+
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.File;
@@ -51,8 +55,15 @@ public class Unique {
 
     /** Return the number of unique lines availble to be read by sc */ 
     private static int avlUnique(Scanner sc) {
-      // TODO - implement this; its runtime should be O(n log n)
-      return 0; // placeholder, so code compiles
+      AVL avl = new AVL();
+      while (sc.hasNextLine()) {
+        String line = sc.nextLine();
+        if (avl.search(line) == null) {
+          avl.avlInsert(line);
+        }
+      }
+
+      return avl.getSize();
     }
 
 
