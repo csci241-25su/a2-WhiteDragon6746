@@ -79,6 +79,9 @@ public class AVL {
   /* insert w into the tree, maintaining AVL balance
    *  precondition: the tree is AVL balanced and n is not null */
   private void avlInsert(Node n, String w) {
+    if (n.word.equals(w)) {
+      return;
+    }
     if (w.compareTo(n.word) < 0) {
       if (n.left == null) {
         n.left = new Node(w, n);
